@@ -4,6 +4,20 @@
 Persona::Persona(const std::string& nombre, const std::string& direccion, const std::string& telefono)
     : nombre(nombre), direccion(direccion), telefono(telefono) {}
 
+    std::string Persona::getNombre() const {
+    return nombre;
+}
+
+// Nuevos métodos
+std::string Persona::getDireccion() const { 
+    return direccion;
+}
+
+std::string Persona::getTelefono() const { 
+    return telefono;
+}
+
+
 // Implementación de Paciente
 Paciente::Paciente(int id, const std::string& nombre, const std::string& direccion, const std::string& telefono)
     : Persona(nombre, direccion, telefono), idPaciente(id) {}

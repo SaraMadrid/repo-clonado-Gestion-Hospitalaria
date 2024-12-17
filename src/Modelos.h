@@ -15,7 +15,11 @@ protected:
 public:
     Persona(const std::string& nombre, const std::string& direccion, const std::string& telefono);
     virtual ~Persona() = default;
+
+//Getters nuevos añadidos
     std::string getNombre() const;
+    std::string getDireccion() const; 
+    std::string getTelefono() const; 
 };
 
 // Clase Paciente
