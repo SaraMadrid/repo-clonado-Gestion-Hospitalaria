@@ -5,16 +5,19 @@ project(GestionHospitalaria)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Directorio donde se encuentran los encabezados
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
 # Todos los archivos fuente
 set(SOURCES
-    main.cpp
-    InterfazHospital.cpp
-    Modelos.cpp
-    Servicios.cpp
+    src/main.cpp
+    src/InterfazHospital.cpp
+    src/Modelos.cpp
+    src/Servicios.cpp
 )
 
 # Incluye los encabezados
-include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${INCLUDE_DIR})
 
 # Crea el ejecutable
 add_executable(GestionHospitalaria ${SOURCES})
