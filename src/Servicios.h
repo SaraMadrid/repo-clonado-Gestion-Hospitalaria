@@ -31,7 +31,7 @@ private:
     std::vector<Cita> listaCitas;
 
 public:
-    void agendarCita(int idPaciente, int idMedico, const std::string& fecha);
+    void agendarCita(int idPaciente, int idMedico, const std::string& fecha, const std::string& motivo);
     void cancelarCita(int idCita);
 };
 
@@ -52,4 +52,3 @@ public:
 };
 
 #endif
-

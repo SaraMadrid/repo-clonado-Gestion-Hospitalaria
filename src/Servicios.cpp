@@ -37,4 +37,38 @@ void ServicioMedicos::bajaMedico(int idMedico) {
     std::cout << "Médico eliminado.\n";
 }
 
+// ServivioCitas
+void ServicioCitas::agendarCita(int idPaciente, int idMedico, const std::string& fecha, const std::string& motivo) {
+    listaCitas.push_back(Cita(listaCitas.size() + 1, idPaciente, idMedico, fecha, motivo));
+    std::cout << "Cita agendada.\n";
+}
 
+void ServicioCitas::cancelarCita(int idCita) {
+    listaCitas.erase(std::remove_if(listaCitas.begin(), listaCitas.end(),
+        [idCita](const Cita& c) { return c.getIdCita() == idCita; }), listaCitas.end());
+    std::cout << "Cita cancelada.\n";
+}
+
+// ServicioReportes.cpp
+#include "Servicios.h"
+#include <iostream>
+
+void ServicioReportes::generarReporteAtencion(int idMedico) {
+    std::cout << "Generando reporte de atención para el médico con ID: " << idMedico << std::endl;
+}
+
+void ServicioReportes::reporteCitasPendientes() {
+    std::cout << "Generando reporte de citas pendientes..." << std::endl;
+}
+
+void ServicioArchivos::guardarDatos() {
+    std::cout << "Guardando datos..." << std::endl;
+}
+
+void ServicioArchivos::cargarDatos() {
+    std::cout << "Cargando datos..." << std::endl;
+}
+
+void ServicioArchivos::backup() {
+    std::cout << "Realizando backup..." << std::endl;
+}

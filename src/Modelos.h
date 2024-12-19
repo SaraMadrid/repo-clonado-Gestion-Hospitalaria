@@ -51,7 +51,7 @@ private:
     int idCita;
     int idPaciente;
     int idMedico;
-    std::string fecha; // Fecha en formato "YYYY-MM-DD"
+    std::string fecha; // formato "YYYY-MM-DD"
     std::string motivo;
 
 public:
