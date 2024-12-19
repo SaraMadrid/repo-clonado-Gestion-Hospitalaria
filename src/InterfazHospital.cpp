@@ -1,5 +1,7 @@
 #include "InterfazHospital.h"
 #include <iostream>
+#include <limits>
+
 
 void InterfazHospital::gestionarPacientes() {
     int opcion = 0;
@@ -10,14 +12,24 @@ void InterfazHospital::gestionarPacientes() {
         std::cout << "3. Baja de Paciente\n";
         std::cout << "4. Volver\n";
         std::cout << "Seleccione una opción: ";
-        std::cin >> opcion;
+        if (!(std::cin >> opcion)) {
+            std::cout << "Error: Entrada no válida.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
 
         switch (opcion) {
             case 1: {
                 int id;
                 std::string nombre, direccion, telefono;
                 std::cout << "ID: ";
-                std::cin >> id;
+                if (!(std::cin >> id)) {
+                    std::cout << "Error: Entrada no válida.\n";
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    break;
+                }
                 std::cin.ignore();
                 std::cout << "Nombre: ";
                 std::getline(std::cin, nombre);
@@ -32,7 +44,12 @@ void InterfazHospital::gestionarPacientes() {
                 int id;
                 std::string nuevoNombre;
                 std::cout << "ID del paciente: ";
-                std::cin >> id;
+                if (!(std::cin >> id)) {
+                    std::cout << "Error: Entrada no válida.\n";
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    break;
+                }
                 std::cin.ignore();
                 std::cout << "Nuevo Nombre: ";
                 std::getline(std::cin, nuevoNombre);
@@ -42,15 +59,24 @@ void InterfazHospital::gestionarPacientes() {
             case 3: {
                 int id;
                 std::cout << "ID del paciente a eliminar: ";
-                std::cin >> id;
+                if (!(std::cin >> id)) {
+                    std::cout << "Error: Entrada no válida.\n";
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    break;
+                }
                 servicioPacientes.bajaPaciente(id);
                 break;
             }
-            case 4: std::cout << "Volviendo al menú principal...\n"; break;
-            default: std::cout << "Opción no válida. Intente de nuevo.\n";
+            case 4:
+                std::cout << "Volviendo al menú principal...\n";
+                break;
+            default:
+                std::cout << "Opción no válida. Intente de nuevo.\n";
         }
     }
 }
+
 
 void InterfazHospital::gestionarMedicos() {
     int opcion = 0;
@@ -60,14 +86,24 @@ void InterfazHospital::gestionarMedicos() {
         std::cout << "2. Baja de Médico\n";
         std::cout << "3. Volver\n";
         std::cout << "Seleccione una opción: ";
-        std::cin >> opcion;
+        if (!(std::cin >> opcion)) {
+            std::cout << "Error: Entrada no válida.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
 
         switch (opcion) {
             case 1: {
                 int id;
                 std::string nombre, direccion, telefono, especialidad;
                 std::cout << "ID: ";
-                std::cin >> id;
+                if (!(std::cin >> id)) {
+                    std::cout << "Error: Entrada no válida.\n";
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    break;
+                }
                 std::cin.ignore();
                 std::cout << "Nombre: ";
                 std::getline(std::cin, nombre);
@@ -83,15 +119,24 @@ void InterfazHospital::gestionarMedicos() {
             case 2: {
                 int id;
                 std::cout << "ID del médico a eliminar: ";
-                std::cin >> id;
+                if (!(std::cin >> id)) {
+                    std::cout << "Error: Entrada no válida.\n";
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    break;
+                }
                 servicioMedicos.bajaMedico(id);
                 break;
             }
-            case 3: std::cout << "Volviendo al menú principal...\n"; break;
-            default: std::cout << "Opción no válida. Intente de nuevo.\n";
+            case 3:
+                std::cout << "Volviendo al menú principal...\n";
+                break;
+            default:
+                std::cout << "Opción no válida. Intente de nuevo.\n";
         }
     }
 }
+
 
 void InterfazHospital::gestionarCitas() {
     int opcion = 0;
@@ -101,16 +146,31 @@ void InterfazHospital::gestionarCitas() {
         std::cout << "2. Cancelar Cita\n";
         std::cout << "3. Volver\n";
         std::cout << "Seleccione una opción: ";
-        std::cin >> opcion;
+        if (!(std::cin >> opcion)) {
+            std::cout << "Error: Entrada no válida.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
 
         switch (opcion) {
             case 1: {
                 int idPaciente, idMedico;
                 std::string fecha, motivo;
                 std::cout << "ID del Paciente: ";
-                std::cin >> idPaciente;
+                if (!(std::cin >> idPaciente)) {
+                    std::cout << "Error: Entrada no válida.\n";
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    break;
+                }
                 std::cout << "ID del Médico: ";
-                std::cin >> idMedico;
+                if (!(std::cin >> idMedico)) {
+                    std::cout << "Error: Entrada no válida.\n";
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    break;
+                }
                 std::cin.ignore();
                 std::cout << "Fecha (YYYY-MM-DD): ";
                 std::getline(std::cin, fecha);
@@ -122,15 +182,24 @@ void InterfazHospital::gestionarCitas() {
             case 2: {
                 int idCita;
                 std::cout << "ID de la cita a cancelar: ";
-                std::cin >> idCita;
+                if (!(std::cin >> idCita)) {
+                    std::cout << "Error: Entrada no válida.\n";
+                    std::cin.clear();
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    break;
+                }
                 servicioCitas.cancelarCita(idCita);
                 break;
             }
-            case 3: std::cout << "Volviendo al menú principal...\n"; break;
-            default: std::cout << "Opción no válida. Intente de nuevo.\n";
+            case 3:
+                std::cout << "Volviendo al menú principal...\n";
+                break;
+            default:
+                std::cout << "Opción no válida. Intente de nuevo.\n";
         }
     }
 }
+
 
 void InterfazHospital::generarReportes() {
     int opcion = 0;
