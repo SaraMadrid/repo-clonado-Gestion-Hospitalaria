@@ -2,26 +2,28 @@
 #include <algorithm>
 #include <iostream>
 
-// Implementación de ServicioPacientes
-void ServicioPacientes::altaPaciente(const Paciente& nuevo) {
-    listaPacientes.push_back(nuevo);
-    std::cout << "Paciente agregado.\n";
+
+void ServicioPacientes::altaPaciente(const Paciente& paciente) {
+    listaPacientes.push_back(paciente);
+    std::cout << "Paciente agregado correctamente: " << paciente.getNombre() << "\n";
 }
 
 void ServicioPacientes::modificarDatos(int idPaciente, const std::string& nuevoNombre) {
-    for (auto& paciente : listaPacientes) {
-        if (paciente.getIdPaciente() == idPaciente) {
-            paciente = Paciente(idPaciente, nuevoNombre, paciente.getDireccion(), paciente.getTelefono());
-            std::cout << "Datos del paciente actualizados.\n";
-            return;
-        }
+    auto it = std::find_if(listaPacientes.begin(), listaPacientes.end(),
+        [idPaciente](const Paciente& p) { return p.getIdPaciente() == idPaciente; });
+
+    if (it != listaPacientes.end()) {
+        *it = Paciente(idPaciente, nuevoNombre, it->getDireccion(), it->getTelefono());
+        std::cout << "Datos del paciente actualizados.\n";
+    } else {
+        std::cout << "Error: Paciente no encontrado.\n";
     }
-    std::cout << "Paciente no encontrado.\n";
 }
 
 void ServicioPacientes::bajaPaciente(int idPaciente) {
     listaPacientes.erase(std::remove_if(listaPacientes.begin(), listaPacientes.end(),
-        [idPaciente](const Paciente& p) { return p.getIdPaciente() == idPaciente; }), listaPacientes.end());
+        [idPaciente](const Paciente& p) { return p.getIdPaciente() == idPaciente; }),
+        listaPacientes.end());
     std::cout << "Paciente eliminado.\n";
 }
 
@@ -37,7 +39,7 @@ void ServicioMedicos::bajaMedico(int idMedico) {
     std::cout << "Médico eliminado.\n";
 }
 
-// ServivioCitas
+// ServicioCitas
 void ServicioCitas::agendarCita(int idPaciente, int idMedico, const std::string& fecha, const std::string& motivo) {
     listaCitas.push_back(Cita(listaCitas.size() + 1, idPaciente, idMedico, fecha, motivo));
     std::cout << "Cita agendada.\n";
@@ -49,10 +51,7 @@ void ServicioCitas::cancelarCita(int idCita) {
     std::cout << "Cita cancelada.\n";
 }
 
-// ServicioReportes.cpp
-#include "Servicios.h"
-#include <iostream>
-
+// ServicioReportes
 void ServicioReportes::generarReporteAtencion(int idMedico) {
     std::cout << "Generando reporte de atención para el médico con ID: " << idMedico << std::endl;
 }
@@ -61,6 +60,7 @@ void ServicioReportes::reporteCitasPendientes() {
     std::cout << "Generando reporte de citas pendientes..." << std::endl;
 }
 
+// ServicioArchivos
 void ServicioArchivos::guardarDatos() {
     std::cout << "Guardando datos..." << std::endl;
 }
