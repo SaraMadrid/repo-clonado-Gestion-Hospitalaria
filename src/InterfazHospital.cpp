@@ -216,11 +216,11 @@ void InterfazHospital::generarReportes() {
                 int idMedico;
                 std::cout << "Ingrese el ID del médico: ";
                 std::cin >> idMedico;
-                servicioReportes.generarReporteAtencion(idMedico);
+                servicioReportes.generarReporteAtencion(idMedico); 
                 break;
             }
             case 2:
-                servicioReportes.reporteCitasPendientes();
+                servicioReportes.reporteCitasPendientes();  
                 break;
             case 3:
                 std::cout << "Volviendo al menú principal...\n";
