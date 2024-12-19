@@ -4,6 +4,8 @@
 #include "Modelos.h"
 #include <vector>
 #include <string>
+#include <fstream>
+#include <sstream>
 
 // Declaración de servicios
 class ServicioPacientes {
@@ -14,6 +16,8 @@ public:
     void altaPaciente(const Paciente& nuevo);
     void bajaPaciente(int idPaciente);
     void modificarDatos(int idPaciente, const std::string& nuevoNombre);
+    void guardarDatos();
+    void cargarDatos();
 };
 
 class ServicioMedicos {
@@ -23,7 +27,8 @@ private:
 public:
     void altaMedico(const Medico& nuevo);
     void bajaMedico(int idMedico);
-    void asignarEspecialidad(int idMedico, const std::string& especialidad);
+    void guardarDatos();
+    void cargarDatos();
 };
 
 class ServicioCitas {
@@ -33,22 +38,27 @@ private:
 public:
     void agendarCita(int idPaciente, int idMedico, const std::string& fecha, const std::string& motivo);
     void cancelarCita(int idCita);
+    void guardarDatos();
+    void cargarDatos();
+};
+
+class ServicioArchivos {
+private:
+    std::string nombreArchivoPacientes = "pacientes.txt";
+    std::string nombreArchivoMedicos = "medicos.txt";
+    std::string nombreArchivoCitas = "citas.txt";
+
+public:
+    void guardarDatos();
+    void cargarDatos();
+    void backup();
 };
 
 class ServicioReportes {
 public:
     void generarReporteAtencion(int idMedico);
     void reporteCitasPendientes();
-};
-
-class ServicioArchivos {
-private:
-    std::string nombreArchivo;
-
-public:
-    void guardarDatos();
-    void cargarDatos();
-    void backup();
+    
 };
 
 #endif
