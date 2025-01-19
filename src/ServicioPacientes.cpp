@@ -1,39 +1,64 @@
-#include "ServicioPacientes.h"
-#include <algorithm>  
+#ifndef SERVICIOPACIENTES_H
+#define SERVICIOPACIENTES_H
 
+#include <vector>
+#include <algorithm>
+#include <fstream>
+#include "Paciente.h"
+#include "ServicioArchivos.h"
 
-void ServicioPacientes::agregarPaciente(const Paciente& paciente) {
-    pacientes.push_back(paciente);
-}
+class ServicioPacientes {
+private:
+    std::vector<Paciente> pacientes;
+    ServicioArchivos servicioArchivos;
 
+public:
+    void agregarPaciente(const Paciente& paciente) {
+        pacientes.push_back(paciente);
+    }
 
-Paciente* ServicioPacientes::buscarPacientePorId(int id) {
-    for (auto& paciente : pacientes) {
-        if (paciente.getId() == id) {
-            return &paciente;
+    Paciente* buscarPacientePorId(int id) {
+        auto it = std::find_if(pacientes.begin(), pacientes.end(),
+            [id](const Paciente& paciente) { return paciente.getId() == id; });
+        return it != pacientes.end() ? &(*it) : nullptr;
+    }
+
+    std::vector<Paciente> obtenerTodosLosPacientes() const {
+        return pacientes;
+    }
+
+    bool eliminarPaciente(int id) {
+        auto it = std::remove_if(pacientes.begin(), pacientes.end(),
+            [id](const Paciente& paciente) { return paciente.getId() == id; });
+        if (it != pacientes.end()) {
+            pacientes.erase(it, pacientes.end());
+            return true;
+        }
+        return false;
+    }
+
+    void cargarPacientesDesdeArchivo(const std::string& ruta) {
+        std::ifstream archivo(ruta);
+        std::string linea;
+        while (std::getline(archivo, linea)) {
+            Paciente paciente;
+            paciente.deserializar(linea);
+            agregarPaciente(paciente);
         }
     }
-    return nullptr;
-}
 
-
-std::vector<Paciente> ServicioPacientes::obtenerTodosLosPacientes() const {
-    return pacientes;
-}
-
-bool ServicioPacientes::eliminarPaciente(int id) {
-    
-    auto it = std::remove_if(pacientes.begin(), pacientes.end(),
-                             [id](const Paciente& paciente) { return paciente.getId() == id; });
-
-    
-    if (it != pacientes.end()) {
-        pacientes.erase(it, pacientes.end());
-        return true; // El paciente fue eliminado
+    void guardarPacientesEnArchivo(const std::string& ruta) const {
+        std::ofstream archivo(ruta);
+        for (const auto& paciente : pacientes) {
+            archivo << paciente.serializar() << std::endl;
+        }
     }
 
-    return false; // El paciente no se pudo eliminar
-}
+    
+};
+
+#endif
+
 
 
 

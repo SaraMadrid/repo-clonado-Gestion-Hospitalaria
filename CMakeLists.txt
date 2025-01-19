@@ -12,8 +12,14 @@ set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(SOURCES
     src/main.cpp
     src/InterfazHospital.cpp
-    src/Modelos.cpp
-    src/Servicios.cpp
+    src/Cita.cpp
+    src/Medico.cpp
+    src/Paciente.cpp
+    src/ServicioCitas.cpp
+    src/ServicioMedicos.cpp
+    src/ServicioPacientes.cpp
+    src/ServicioArchivos.cpp
+
 )
 
 # Incluye los encabezados

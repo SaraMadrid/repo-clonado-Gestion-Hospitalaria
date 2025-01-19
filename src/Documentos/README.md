@@ -1,4 +1,4 @@
-# Proyecto de Gestión Hospitalaria (todavía en proceso)
+# Proyecto de Gestión Hospitalaria 
 
 Este proyecto es un simulador de gestión hospitalaria desarrollado en C++. Permite gestionar pacientes, médicos, citas y generar reportes.
 
