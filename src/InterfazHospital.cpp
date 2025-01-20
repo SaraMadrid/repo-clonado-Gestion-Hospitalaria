@@ -2,6 +2,7 @@
 #include "Cita.h"
 #include "ServicioCitas.h"
 #include "ServicioPacientes.h"
+#include "ServicioMedicos.h"
 #include "ServicioArchivos.h"
 #include "Paciente.h"
 #include "Medico.h"
@@ -10,9 +11,22 @@
 #include <algorithm>
 #include <limits>
 #include <regex>
+
 using namespace std;
 
+
+InterfazHospital::InterfazHospital()
+    : servicioPacientes("pacientes.txt"),
+      servicioMedicos("medicos.txt"),
+      servicioCitas("citas.txt") {
+}
+
 void InterfazHospital::iniciar() {
+    
+    servicioPacientes.cargarPacientesDesdeArchivo("pacientes.txt");
+    servicioMedicos.cargarMedicosDesdeArchivo("medicos.txt");
+    servicioCitas.cargarCitasDesdeArchivo("citas.txt");
+
     int opcion;
     do {
         mostrarMenuPrincipal();
@@ -29,6 +43,11 @@ void InterfazHospital::iniciar() {
             gestionarCitas();
             break;
         case 0:
+        
+            // Guardar los datos en los archivos antes de salir
+            servicioPacientes.guardarPacientesEnArchivo("pacientes.txt");
+            servicioMedicos.guardarMedicosEnArchivo("medicos.txt");
+            servicioCitas.guardarCitasEnArchivo("citas.txt");
             std::cout << "Saliendo del sistema...\n";
             break;
         default:
@@ -98,8 +117,8 @@ void InterfazHospital::agregarMedico() {
     std::cout << "Ingrese especialidad del médico: ";
     std::getline(std::cin, especialidad);
 
-    Medico medico(id, nombre, especialidad);  // Crear el objeto Medico
-    servicioMedicos.agregarMedico(medico);    // Llamar al servicio para agregar el médico
+    Medico medico(id, nombre, especialidad);  
+    servicioMedicos.agregarMedico(medico);    
 
     std::cout << "Médico agregado con éxito.\n";
 }
@@ -113,17 +132,17 @@ void InterfazHospital::modificarMedico() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
-    Medico* medico = servicioMedicos.buscarMedicoPorId(id);  // Cambiado a puntero
+    Medico* medico = servicioMedicos.buscarMedicoPorId(id);  
     if (medico) {
         std::string nombre, especialidad;
-        std::cin.ignore();  // Limpiar el buffer de entrada
+        std::cin.ignore();  
         std::cout << "Ingrese nuevo nombre: ";
         std::getline(std::cin, nombre);
         std::cout << "Ingrese nueva especialidad: ";
         std::getline(std::cin, especialidad);
 
-        medico->setNombre(nombre);      // Usamos -> porque es un puntero
-        medico->setEspecialidad(especialidad); // Usamos -> porque es un puntero
+        medico->setNombre(nombre);      
+        medico->setEspecialidad(especialidad); 
 
         std::cout << "Médico modificado con éxito.\n";
     } else {
@@ -154,8 +173,6 @@ void InterfazHospital::listarMedicos() {
 }
 
 // Gestión de Pacientes
-ServicioPacientes servicioPacientes;
-
 void InterfazHospital::gestionarPacientes() {
     int opcion;
     do {
@@ -261,7 +278,7 @@ void InterfazHospital::modificarPaciente() {
         paciente->setDireccion(nuevaDireccion);
         paciente->setTelefono(nuevoTelefono);
 
-        cout << "Paciente modificado exitosamente.\n";
+        cout << "Paciente modificado correctamente.\n";
     } else {
         cout << "No se encontró un paciente con el ID proporcionado.\n";
     }
@@ -277,7 +294,6 @@ void InterfazHospital::eliminarPaciente() {
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 
-   
     bool resultado = servicioPacientes.eliminarPaciente(id);  
     if (resultado) {
         cout << "Paciente eliminado con éxito.\n";
@@ -303,6 +319,7 @@ void InterfazHospital::listarPacientes() {
         cout << "-------------------------\n";
     }
 }
+
 
 // Gestión de Citas
 void InterfazHospital::gestionarCitas() {
@@ -401,8 +418,8 @@ void InterfazHospital::modificarCita() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
-    Cita cita = servicioCitas.buscarCitaPorId(id);
-    if (&cita) {  
+    Cita* cita = servicioCitas.buscarCitaPorId(id);  
+    if (cita) {  
         std::string fecha, hora, motivo;
         std::cin.ignore();
 
@@ -424,13 +441,12 @@ void InterfazHospital::modificarCita() {
             std::cout << "Formato inválido. Ingrese una hora válida (HH:MM): ";
         }
 
-        std::cout << "Ingrese nuevo motivo de la cita: ";
+        std::cout << "Ingrese el nuevo motivo de la cita: ";
         std::getline(std::cin, motivo);
 
-        
-        cita.setFecha(fecha);
-        cita.setHora(hora);
-        cita.setMotivo(motivo);
+        cita->setFecha(fecha);
+        cita->setHora(hora);
+        cita->setMotivo(motivo);
 
         std::cout << "Cita modificada con éxito.\n";
     } else {
@@ -447,30 +463,27 @@ void InterfazHospital::eliminarCita() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
-    servicioCitas.eliminarCita(id);
+    servicioCitas.eliminarCita(id);  
     std::cout << "Cita eliminada con éxito (si existía).\n";
 }
 
 void InterfazHospital::listarCitas() {
     auto citas = servicioCitas.obtenerTodasLasCitas();
+    if (citas.empty()) {
+        std::cout << "No hay citas registradas.\n";
+        return;
+    }
+
+    std::cout << "Listado de citas:\n";
     for (const auto& cita : citas) {
-        std::cout << "ID: " << cita.getId()
-                  << ", Paciente ID: " << cita.getIdPaciente()
-                  << ", Médico ID: " << cita.getIdMedico()
-                  << ", Fecha: " << cita.getFecha()
-                  << ", Hora: " << cita.getHora()
-                  << ", Motivo: " << cita.getMotivo() << "\n";
+        std::cout << "ID: " << cita.getId() << "\n";
+        std::cout << "Paciente ID: " << cita.getIdPaciente() << "\n";
+        std::cout << "Médico ID: " << cita.getIdMedico() << "\n";
+        std::cout << "Fecha: " << cita.getFecha() << "\n";
+        std::cout << "Hora: " << cita.getHora() << "\n";
+        std::cout << "Motivo: " << cita.getMotivo() << "\n";
+        std::cout << "-------------------------\n";
     }
 }
 
-void InterfazHospital::validarFormatoFechaHora(const std::string& fecha, const std::string& hora) {
-    std::regex formatoFecha(R"(\d{4}-\d{2}-\d{2})"); 
-    std::regex formatoHora(R"(\d{2}:\d{2})");        
 
-    if (!std::regex_match(fecha, formatoFecha)) {
-        throw std::invalid_argument("Fecha inválida. El formato debe ser YYYY-MM-DD.");
-    }
-    if (!std::regex_match(hora, formatoHora)) {
-        throw std::invalid_argument("Hora inválida. El formato debe ser HH:MM.");
-    }
-}

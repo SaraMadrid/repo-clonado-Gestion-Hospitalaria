@@ -4,10 +4,10 @@
 #include "ServicioCitas.h"
 #include "ServicioPacientes.h"
 #include "ServicioMedicos.h"
-#include "Paciente.h"
-#include "Medico.h"
-#include "Cita.h"
-#pragma once
+#include "ServicioArchivos.h"
+#include <iostream>
+#include <string>
+#include <regex>
 
 class InterfazHospital {
 private:
@@ -35,9 +35,13 @@ private:
     void eliminarCita();
     void listarCitas();
     void validarFormatoFechaHora(const std::string& fecha, const std::string& hora);
-    
+
 public:
+    InterfazHospital(); 
+
     void iniciar();
 };
 
-#endif
+#endif 
+
+
