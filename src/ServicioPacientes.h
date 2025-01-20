@@ -2,65 +2,44 @@
 #define SERVICIOPACIENTES_H
 
 #include <vector>
-#include <algorithm>
-#include <fstream>
+#include <string>
 #include "Paciente.h"
 #include "ServicioArchivos.h"
 
 class ServicioPacientes {
 private:
     std::vector<Paciente> pacientes;
-    mutable ServicioArchivos servicioArchivos;  // Aquí se agrega 'mutable' para permitir llamadas a métodos no const.
+    ServicioArchivos servicioArchivos;
 
 public:
-    void agregarPaciente(const Paciente& paciente) {
-        pacientes.push_back(paciente);
-    }
+    // Constructor que inicializa servicioArchivos
+    ServicioPacientes(const std::string& rutaArchivo);
 
-    Paciente* buscarPacientePorId(int id) {
-        auto it = std::find_if(pacientes.begin(), pacientes.end(),
-            [id](const Paciente& paciente) { return paciente.getId() == id; });
-        return it != pacientes.end() ? &(*it) : nullptr;
-    }
+    // Agregar un paciente
+    void agregarPaciente(const Paciente& paciente);
 
-    std::vector<Paciente> obtenerTodosLosPacientes() const {
-        return pacientes;
-    }
+    // Buscar paciente por ID
+    Paciente* buscarPacientePorId(int id);
 
-    bool eliminarPaciente(int id) {
-        auto it = std::remove_if(pacientes.begin(), pacientes.end(),
-            [id](const Paciente& paciente) { return paciente.getId() == id; });
-        if (it != pacientes.end()) {
-            pacientes.erase(it, pacientes.end());
-            return true;
-        }
-        return false;
-    }
+    // Obtener todos los pacientes
+    const std::vector<Paciente>& obtenerTodosLosPacientes() const;
 
-    void cargarPacientesDesdeArchivo(const std::string& ruta) {
-        std::ifstream archivo(ruta);
-        std::string linea;
-        while (std::getline(archivo, linea)) {
-            Paciente paciente;
-            paciente.deserializar(linea);
-            agregarPaciente(paciente);
-        }
-    }
+    // Eliminar paciente por ID
+    bool eliminarPaciente(int id);
 
-    void guardarPacientesEnArchivo(const std::string& ruta) const {
-        std::ofstream archivo(ruta);
-        for (const auto& paciente : pacientes) {
-            archivo << paciente.serializar() << std::endl;
-        }
-    }
+    // Cargar pacientes desde archivo
+    void cargarPacientesDesdeArchivo(const std::string& ruta);
 
-    // Usamos el ServicioArchivos para generar reportes de pacientes
-    void generarReporteDePacientes(const std::string& rutaReporte) const {
-        servicioArchivos.generarReportePacientes(pacientes, rutaReporte);
-    }
+    // Guardar pacientes en archivo
+    void guardarPacientesEnArchivo(const std::string& ruta) const;
+
+    // Generar reporte de pacientes
+    void generarReporteDePacientes(const std::string& rutaReporte) const;
 };
 
-#endif
+#endif 
+
+
 
 
 

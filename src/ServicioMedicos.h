@@ -1,26 +1,31 @@
 #ifndef SERVICIO_MEDICOS_H
 #define SERVICIO_MEDICOS_H
 
-#include "Medico.h"
-#include <vector>
 #include <string>
+#include <vector>
+#include "Medico.h"
+#include "ServicioArchivos.h"
 
 class ServicioMedicos {
 private:
-    std::vector<Medico> medicos;  // Aquí guardas los médicos
+    std::vector<Medico> medicos;
+    ServicioArchivos servicioArchivos;
+    std::string archivoMedicos; 
 
 public:
+    ServicioMedicos(const std::string& rutaArchivo);
+
     void agregarMedico(const Medico& medico);
     Medico* buscarMedicoPorId(int id);
-    std::vector<Medico> obtenerTodosLosMedicos() const;
+    const std::vector<Medico>& obtenerTodosLosMedicos() const;
     void eliminarMedico(int id);
-
-    // Métodos para cargar y guardar en archivos
     void cargarMedicosDesdeArchivo(const std::string& ruta);
     void guardarMedicosEnArchivo(const std::string& ruta) const;
 };
 
-#endif
+#endif 
+
+
 
 
 

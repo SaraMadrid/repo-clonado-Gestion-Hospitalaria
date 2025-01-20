@@ -1,63 +1,72 @@
-#ifndef SERVICIOPACIENTES_H
-#define SERVICIOPACIENTES_H
-
-#include <vector>
-#include <algorithm>
+#include "ServicioPacientes.h"
 #include <fstream>
-#include "Paciente.h"
-#include "ServicioArchivos.h"
+#include <stdexcept>
+#include <algorithm>
 
-class ServicioPacientes {
-private:
-    std::vector<Paciente> pacientes;
-    ServicioArchivos servicioArchivos;
+// Constructor que inicializa servicioArchivos
+ServicioPacientes::ServicioPacientes(const std::string& rutaArchivo)
+    : servicioArchivos(rutaArchivo) {}
 
-public:
-    void agregarPaciente(const Paciente& paciente) {
+void ServicioPacientes::agregarPaciente(const Paciente& paciente) {
+    pacientes.push_back(paciente);
+    guardarPacientesEnArchivo("pacientes.txt");
+}
+
+Paciente* ServicioPacientes::buscarPacientePorId(int id) {
+    auto it = std::find_if(pacientes.begin(), pacientes.end(),
+        [id](const Paciente& paciente) { return paciente.getId() == id; });
+    return it != pacientes.end() ? &(*it) : nullptr;
+}
+
+const std::vector<Paciente>& ServicioPacientes::obtenerTodosLosPacientes() const {
+    return pacientes;
+}
+
+bool ServicioPacientes::eliminarPaciente(int id) {
+    auto it = std::remove_if(pacientes.begin(), pacientes.end(),
+        [id](const Paciente& paciente) { return paciente.getId() == id; });
+    if (it != pacientes.end()) {
+        pacientes.erase(it, pacientes.end());
+        guardarPacientesEnArchivo("pacientes.txt");
+        return true;
+    }
+    return false;
+}
+
+void ServicioPacientes::cargarPacientesDesdeArchivo(const std::string& ruta) {
+    std::ifstream archivo(ruta);
+    if (!archivo.is_open()) {
+        throw std::runtime_error("No se pudo abrir el archivo para leer.");
+    }
+
+    std::string linea;
+    while (std::getline(archivo, linea)) {
+        Paciente paciente;
+        paciente.deserializar(linea);
         pacientes.push_back(paciente);
     }
 
-    Paciente* buscarPacientePorId(int id) {
-        auto it = std::find_if(pacientes.begin(), pacientes.end(),
-            [id](const Paciente& paciente) { return paciente.getId() == id; });
-        return it != pacientes.end() ? &(*it) : nullptr;
+    archivo.close();
+}
+
+void ServicioPacientes::guardarPacientesEnArchivo(const std::string& ruta) const {
+    std::ofstream archivo(ruta);
+    if (!archivo.is_open()) {
+        throw std::runtime_error("No se pudo abrir el archivo para escribir.");
     }
 
-    std::vector<Paciente> obtenerTodosLosPacientes() const {
-        return pacientes;
+    for (const auto& paciente : pacientes) {
+        archivo << paciente.serializar() << std::endl;
     }
 
-    bool eliminarPaciente(int id) {
-        auto it = std::remove_if(pacientes.begin(), pacientes.end(),
-            [id](const Paciente& paciente) { return paciente.getId() == id; });
-        if (it != pacientes.end()) {
-            pacientes.erase(it, pacientes.end());
-            return true;
-        }
-        return false;
-    }
+    archivo.close();
+}
 
-    void cargarPacientesDesdeArchivo(const std::string& ruta) {
-        std::ifstream archivo(ruta);
-        std::string linea;
-        while (std::getline(archivo, linea)) {
-            Paciente paciente;
-            paciente.deserializar(linea);
-            agregarPaciente(paciente);
-        }
-    }
+void ServicioPacientes::generarReporteDePacientes(const std::string& rutaReporte) const {
+    servicioArchivos.generarReportePacientes(pacientes);
+}
 
-    void guardarPacientesEnArchivo(const std::string& ruta) const {
-        std::ofstream archivo(ruta);
-        for (const auto& paciente : pacientes) {
-            archivo << paciente.serializar() << std::endl;
-        }
-    }
 
-    
-};
-
-#endif
 
 
 

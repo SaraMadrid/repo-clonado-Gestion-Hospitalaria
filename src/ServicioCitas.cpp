@@ -1,24 +1,30 @@
 #include "ServicioCitas.h"
-#include "Cita.h"
-#include <algorithm>
+#include <fstream>
 #include <stdexcept>
+#include <algorithm>
+
+// Constructor que inicializa archivoCitas y servicioArchivos
+ServicioCitas::ServicioCitas(const std::string& rutaArchivo)
+    : archivoCitas(rutaArchivo), servicioArchivos(rutaArchivo) { }
 
 void ServicioCitas::agregarCita(const Cita& cita) {
     citas.push_back(cita);
+    guardarCitasEnArchivo(archivoCitas);
 }
 
 void ServicioCitas::eliminarCita(int id) {
-    citas.erase(std::remove_if(citas.begin(), citas.end(),
-        [id](const Cita& cita) { return cita.getId() == id; }), citas.end());
-}
-
-Cita ServicioCitas::buscarCitaPorId(int id) const {
-    auto it = std::find_if(citas.begin(), citas.end(),
+    auto it = std::remove_if(citas.begin(), citas.end(),
         [id](const Cita& cita) { return cita.getId() == id; });
     if (it != citas.end()) {
-        return *it;
+        citas.erase(it, citas.end());
+        guardarCitasEnArchivo(archivoCitas);
     }
-    throw std::runtime_error("Cita no encontrada");
+}
+
+Cita* ServicioCitas::buscarCitaPorId(int id) {
+    auto it = std::find_if(citas.begin(), citas.end(),
+        [id](const Cita& cita) { return cita.getId() == id; });
+    return it != citas.end() ? &(*it) : nullptr;
 }
 
 const std::vector<Cita>& ServicioCitas::obtenerTodasLasCitas() const {
@@ -26,20 +32,36 @@ const std::vector<Cita>& ServicioCitas::obtenerTodasLasCitas() const {
 }
 
 void ServicioCitas::cargarCitasDesdeArchivo(const std::string& ruta) {
-    auto lineas = servicioArchivos.leerLineasDesdeArchivo(ruta);
-    for (const auto& linea : lineas) {
+    std::ifstream archivo(ruta);
+    if (!archivo.is_open()) {
+        throw std::runtime_error("No se pudo abrir el archivo para leer.");
+    }
+
+    std::string linea;
+    while (std::getline(archivo, linea)) {
         Cita cita;
         cita.deserializar(linea);
-        agregarCita(cita);
+        citas.push_back(cita);
     }
+
+    archivo.close();
 }
 
 void ServicioCitas::guardarCitasEnArchivo(const std::string& ruta) const {
-    std::vector<std::string> lineas;
-    for (const auto& cita : citas) {
-        lineas.push_back(cita.serializar());
+    std::ofstream archivo(ruta);
+    if (!archivo.is_open()) {
+        throw std::runtime_error("No se pudo abrir el archivo para escribir.");
     }
+
+    for (const auto& cita : citas) {
+        archivo << cita.serializar() << std::endl;
+    }
+
+    archivo.close();
 }
+
+
+
 
 
 
