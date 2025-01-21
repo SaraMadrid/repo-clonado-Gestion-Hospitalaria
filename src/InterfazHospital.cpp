@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <fstream>
 #include <limits>
 #include <regex>
 
@@ -18,11 +19,26 @@ using namespace std;
 InterfazHospital::InterfazHospital()
     : servicioPacientes("pacientes.txt"),
       servicioMedicos("medicos.txt"),
-      servicioCitas("citas.txt") {
+      servicioCitas("citas.txt"), 
+      servicioArchivos("") {
+}
+
+bool InterfazHospital::archivoExiste(const std::string& nombreArchivo) {
+    std::ifstream archivo(nombreArchivo);
+    return archivo.good();  
 }
 
 void InterfazHospital::iniciar() {
-    
+    if (!archivoExiste("pacientes.txt")) {
+        std::ofstream archivo("pacientes.txt"); archivo.close();
+    }
+    if (!archivoExiste("medicos.txt")) {
+        std::ofstream archivo("medicos.txt"); archivo.close();
+    }
+    if (!archivoExiste("citas.txt")) {
+        std::ofstream archivo("citas.txt"); archivo.close();
+    }
+
     servicioPacientes.cargarPacientesDesdeArchivo("pacientes.txt");
     servicioMedicos.cargarMedicosDesdeArchivo("medicos.txt");
     servicioCitas.cargarCitasDesdeArchivo("citas.txt");
@@ -42,9 +58,10 @@ void InterfazHospital::iniciar() {
         case 3:
             gestionarCitas();
             break;
+        case 4:
+            generarReportes();
+            break;
         case 0:
-        
-            // Guardar los datos en los archivos antes de salir
             servicioPacientes.guardarPacientesEnArchivo("pacientes.txt");
             servicioMedicos.guardarMedicosEnArchivo("medicos.txt");
             servicioCitas.guardarCitasEnArchivo("citas.txt");
@@ -56,11 +73,13 @@ void InterfazHospital::iniciar() {
     } while (opcion != 0);
 }
 
+
 void InterfazHospital::mostrarMenuPrincipal() {
     std::cout << "\n--- Menú Principal ---\n";
     std::cout << "1. Gestionar Pacientes\n";
     std::cout << "2. Gestionar Médicos\n";
     std::cout << "3. Gestionar Citas\n";
+    std::cout << "4. Generar Reportes\n";
     std::cout << "0. Salir\n";
     std::cout << "Seleccione una opción: ";
 }
@@ -179,8 +198,9 @@ void InterfazHospital::gestionarPacientes() {
         cout << "\n--- Gestión de Pacientes ---\n";
         cout << "1. Agregar Paciente\n";
         cout << "2. Modificar Paciente\n";
-        cout << "3. Eliminar Paciente\n";
-        cout << "4. Listar Pacientes\n";
+        cout << "3. Buscar Paciente\n";
+        cout << "4. Eliminar Paciente\n";
+        cout << "5. Listar Pacientes\n";
         cout << "0. Regresar\n";
         cout << "Seleccione una opción: ";
         cin >> opcion;
@@ -484,6 +504,20 @@ void InterfazHospital::listarCitas() {
         std::cout << "Motivo: " << cita.getMotivo() << "\n";
         std::cout << "-------------------------\n";
     }
+}
+
+void InterfazHospital::generarReportes() {
+    std::cout << "Generando reportes...\n";
+
+    auto pacientes = servicioPacientes.obtenerTodosLosPacientes();
+    auto medicos = servicioMedicos.obtenerTodosLosMedicos();
+    auto citas = servicioCitas.obtenerTodasLasCitas();
+
+    servicioArchivos.generarReportePacientes(pacientes);
+    servicioArchivos.generarReporteMedicos(medicos);
+    servicioArchivos.generarReporteCitas(citas);
+
+    std::cout << "Reportes generados correctamente.\n";
 }
 
 

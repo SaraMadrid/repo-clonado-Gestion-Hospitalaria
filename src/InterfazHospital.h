@@ -14,11 +14,19 @@ private:
     ServicioCitas servicioCitas;
     ServicioPacientes servicioPacientes;
     ServicioMedicos servicioMedicos;
+    ServicioArchivos nombreArchivo;
+    ServicioArchivos servicioArchivos;
+
+public:
+    InterfazHospital(); 
+
+    bool archivoExiste(const std::string& nombreArchivo); 
 
     void mostrarMenuPrincipal();
     void gestionarPacientes();
     void gestionarMedicos();
     void gestionarCitas();
+    void generarReportes();
 
     void agregarPaciente();
     void modificarPaciente();
@@ -36,8 +44,6 @@ private:
     void listarCitas();
     void validarFormatoFechaHora(const std::string& fecha, const std::string& hora);
 
-public:
-    InterfazHospital(); 
 
     void iniciar();
 };
