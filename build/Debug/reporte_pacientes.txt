@@ -1,0 +1,13 @@
+--- Reporte de Pacientes ---
+ID: 1
+Nombre: aefer
+Edad: 56
+Dirección: ghjuk
+Teléfono: 67989674
+-------------------------
+ID: 2
+Nombre: wsfeerd
+Edad: 34
+Dirección: dfghbfg
+Teléfono: 234546766
+-------------------------

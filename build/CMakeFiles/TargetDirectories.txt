@@ -1,0 +1,3 @@
+C:/Proyectos/ProyectoGestionHospitalaria/build/CMakeFiles/GestionHospitalaria.dir
+C:/Proyectos/ProyectoGestionHospitalaria/build/CMakeFiles/ALL_BUILD.dir
+C:/Proyectos/ProyectoGestionHospitalaria/build/CMakeFiles/ZERO_CHECK.dir
