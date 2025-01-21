@@ -57,7 +57,7 @@ void ServicioMedicos::cargarMedicosDesdeArchivo(const std::string& ruta) {
 
 // Guardar médicos en un archivo de texto
 void ServicioMedicos::guardarMedicosEnArchivo(const std::string& ruta) const {
-    std::ofstream archivo(ruta);
+    std::ofstream archivo("medicos.txt");
     if (!archivo.is_open()) {
         throw std::runtime_error("No se pudo abrir el archivo para escribir.");
     }

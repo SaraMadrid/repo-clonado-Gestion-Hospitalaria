@@ -1,13 +1,13 @@
 #include "Paciente.h"
 
-// Constructor por defecto
+
 Paciente::Paciente() : id(0), nombre(""), edad(0), direccion(""), telefono("") {}
 
 // Constructor con parámetros
 Paciente::Paciente(int id, const std::string& nombre, int edad, const std::string& direccion, const std::string& telefono)
     : id(id), nombre(nombre), edad(edad), direccion(direccion), telefono(telefono) {}
 
-// Getters y Setters
+
 int Paciente::getId() const { return id; }
 void Paciente::setId(int id) { this->id = id; }
 
@@ -22,6 +22,7 @@ void Paciente::setDireccion(const std::string& direccion) { this->direccion = di
 
 std::string Paciente::getTelefono() const { return telefono; }
 void Paciente::setTelefono(const std::string& telefono) { this->telefono = telefono; }
+
 
 // Métodos de serialización y deserialización
 std::string Paciente::serializar() const {

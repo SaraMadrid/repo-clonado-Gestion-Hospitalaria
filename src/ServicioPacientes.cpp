@@ -13,6 +13,19 @@ void ServicioPacientes::agregarPaciente(const Paciente& paciente) {
     guardarPacientesEnArchivo("pacientes.txt");
 }
 
+void ServicioPacientes::guardarPacientesEnArchivo(const std::string& ruta) const {
+    std::ofstream archivo(ruta);
+    if (!archivo.is_open()) {
+        throw std::runtime_error("No se pudo abrir el archivo para escribir.");
+    }
+
+    for (const auto& paciente : pacientes) {
+        archivo << paciente.serializar() << '\n';  
+    }
+
+    archivo.close();
+}
+
 Paciente* ServicioPacientes::buscarPacientePorId(int id) {
     auto it = std::find_if(pacientes.begin(), pacientes.end(),
         [id](const Paciente& paciente) { return paciente.getId() == id; });
