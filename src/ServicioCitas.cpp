@@ -2,10 +2,11 @@
 #include <fstream>
 #include <stdexcept>
 #include <algorithm>
+#include <iostream>
 
-// Constructor que inicializa archivoCitas y servicioArchivos
+
 ServicioCitas::ServicioCitas(const std::string& rutaArchivo)
-    : archivoCitas(rutaArchivo), servicioArchivos(rutaArchivo) { }
+    : archivoCitas(rutaArchivo), servicioArchivos(rutaArchivo) {}
 
 void ServicioCitas::agregarCita(const Cita& cita) {
     citas.push_back(cita);
@@ -18,6 +19,8 @@ void ServicioCitas::eliminarCita(int id) {
     if (it != citas.end()) {
         citas.erase(it, citas.end());
         guardarCitasEnArchivo(archivoCitas);
+    } else {
+        throw std::runtime_error("No se encontró una cita con el ID proporcionado.");
     }
 }
 
@@ -34,7 +37,13 @@ const std::vector<Cita>& ServicioCitas::obtenerTodasLasCitas() const {
 void ServicioCitas::cargarCitasDesdeArchivo(const std::string& ruta) {
     std::ifstream archivo(ruta);
     if (!archivo.is_open()) {
-        throw std::runtime_error("No se pudo abrir el archivo para leer.");
+        std::cerr << "El archivo no existe. Creando un archivo nuevo en la ruta: " << ruta << std::endl;
+        std::ofstream archivo_creado(ruta);
+        if (!archivo_creado.is_open()) {
+            throw std::runtime_error("No se pudo crear el archivo para escribir.");
+        }
+        archivo_creado.close();
+        return;
     }
 
     std::string linea;

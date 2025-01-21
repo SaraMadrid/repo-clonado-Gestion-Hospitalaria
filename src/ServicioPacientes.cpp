@@ -2,8 +2,9 @@
 #include <fstream>
 #include <stdexcept>
 #include <algorithm>
+#include <iostream>
 
-// Constructor que inicializa servicioArchivos
+
 ServicioPacientes::ServicioPacientes(const std::string& rutaArchivo)
     : servicioArchivos(rutaArchivo) {}
 
@@ -34,45 +35,36 @@ bool ServicioPacientes::eliminarPaciente(int id) {
 }
 
 void ServicioPacientes::cargarPacientesDesdeArchivo(const std::string& ruta) {
-    std::ifstream archivo(ruta);
+    
+    std::ifstream archivo(ruta);  
+
     if (!archivo.is_open()) {
-        throw std::runtime_error("No se pudo abrir el archivo para leer.");
+        std::cerr << "El archivo no existe. Creando un archivo nuevo en la ruta: " << ruta << std::endl;
+        
+        std::ofstream archivo_creado(ruta);  
+        if (!archivo_creado.is_open()) {
+            throw std::runtime_error("No se pudo crear el archivo para escribir.");
+        }
+
+        // Ejemplos
+        archivo_creado << "1,Juan Pérez,30,Calle Ficticia 123,555-1234\n";
+        archivo_creado << "2,María López,25,Calle Ejemplo 456,555-5678\n";
+        archivo_creado << "3,Carlos García,40,Calle Real 789,555-9101\n";
+        archivo_creado.close();  
+        
+        
+        archivo.open(ruta);  
+        if (!archivo.is_open()) {
+            throw std::runtime_error("No se pudo abrir el archivo para leer después de crearlo.");
+        }
     }
 
     std::string linea;
     while (std::getline(archivo, linea)) {
         Paciente paciente;
-        paciente.deserializar(linea);
-        pacientes.push_back(paciente);
+        paciente.deserializar(linea);  
+        pacientes.push_back(paciente);  
     }
 
-    archivo.close();
+    archivo.close();  
 }
-
-void ServicioPacientes::guardarPacientesEnArchivo(const std::string& ruta) const {
-    std::ofstream archivo(ruta);
-    if (!archivo.is_open()) {
-        throw std::runtime_error("No se pudo abrir el archivo para escribir.");
-    }
-
-    for (const auto& paciente : pacientes) {
-        archivo << paciente.serializar() << std::endl;
-    }
-
-    archivo.close();
-}
-
-void ServicioPacientes::generarReporteDePacientes(const std::string& rutaReporte) const {
-    servicioArchivos.generarReportePacientes(pacientes);
-}
-
-
-
-
-
-
-
-
-
-
-

@@ -14,7 +14,7 @@ private:
 
 public:
     // Constructor que inicializa archivoCitas y servicioArchivos
-    ServicioCitas(const std::string& rutaArchivo);
+    explicit ServicioCitas(const std::string& rutaArchivo);
 
     void agregarCita(const Cita& cita);
     void eliminarCita(int id);
@@ -25,6 +25,7 @@ public:
 };
 
 #endif 
+
 
 
 
