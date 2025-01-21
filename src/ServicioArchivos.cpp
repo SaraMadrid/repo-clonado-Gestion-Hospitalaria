@@ -8,17 +8,18 @@
 #include "Medico.h"
 #include "Cita.h"
 
-// Constructor
-ServicioArchivos::ServicioArchivos(const std::string& archivo)
-    : nombreArchivo(archivo) {}
 
-// Guardar datos en el archivo
-void ServicioArchivos::guardar(const std::string& datos) {
-    std::ofstream archivo(nombreArchivo, std::ios::app);
-    if (!archivo) {
-        throw std::runtime_error("No se pudo abrir el archivo para escribir");
+ServicioArchivos::ServicioArchivos() : nombreArchivo("") {
+   
+}
+
+ServicioArchivos::ServicioArchivos(const std::string& archivo) : nombreArchivo(archivo) {
+    if (!archivo.empty()) {
+        std::ofstream archivoInicial(archivo, std::ios::app);
+        if (!archivoInicial) {
+            throw std::runtime_error("No se pudo crear o abrir el archivo: " + archivo);
+        }
     }
-    archivo << datos << '\n';
 }
 
 // Leer datos del archivo
@@ -111,6 +112,7 @@ void ServicioArchivos::generarReporteCitas(const std::vector<Cita>& citas) const
                 << "-------------------------\n";
     }
 }
+
 
 
 
