@@ -79,7 +79,7 @@ void Cita::deserializar(const std::string& cadena) {
         if (std::getline(stream, token, ',')) fecha = token;
         if (std::getline(stream, token, ',')) hora = token;
         if (std::getline(stream, token, ',')) motivo = token;
-    } catch (const std::exception& e) {
+    } catch (const std::exception&) { 
         throw std::runtime_error("Error al deserializar la cadena: formato inválido.");
     }
 }
@@ -94,16 +94,3 @@ std::string Cita::extraerValor(const std::string& cadena, const std::string& cla
     size_t end = cadena.find(",", pos);
     return cadena.substr(pos, end - pos);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
