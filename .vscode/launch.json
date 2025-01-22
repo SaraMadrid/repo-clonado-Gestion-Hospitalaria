@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug C++",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "C:/Proyectos/ProyectoGestionHospitalaria/build/Debug/GestionHospitalaria.exe", 
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "MIDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",  
+            "setupCommands": [
+                {
+                    "description": "Habilitar impresión de formato para gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build"
+        }
+    ]
+}
+
+
+ 

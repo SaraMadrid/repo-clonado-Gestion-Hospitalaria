@@ -1,0 +1,32 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "C:/Proyectos/ProyectoGestionHospitalaria/src/Cita.cpp",
+                "C:/Proyectos/ProyectoGestionHospitalaria/src/InterfazHospital.cpp",
+                "C:/Proyectos/ProyectoGestionHospitalaria/src/main.cpp",
+                "C:/Proyectos/ProyectoGestionHospitalaria/src/Medico.cpp",
+                "C:/Proyectos/ProyectoGestionHospitalaria/src/Paciente.cpp",
+                "C:/Proyectos/ProyectoGestionHospitalaria/src/ServicioArchivos.cpp",
+                "C:/Proyectos/ProyectoGestionHospitalaria/src/ServicioCitas.cpp",
+                "C:/Proyectos/ProyectoGestionHospitalaria/src/ServicioMedicos.cpp",
+                "C:/Proyectos/ProyectoGestionHospitalaria/src/ServicioPacientes.cpp",
+                "-o",
+                "C:/Proyectos/ProyectoGestionHospitalaria/build/Debug/GestionHospitalaria.exe"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Compilación de archivos C++"
+        }
+    ]
+}
+
+
