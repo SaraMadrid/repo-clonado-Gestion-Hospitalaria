@@ -8,7 +8,7 @@
             "program": "C:/Proyectos/ProyectoGestionHospitalaria/build/Debug/GestionHospitalaria.exe", 
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/build/Debug",
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",

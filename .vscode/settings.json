@@ -71,7 +71,8 @@
         "variant": "cpp",
         "codecvt": "cpp",
         "bitset": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "unordered_set": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
     "cmake.options.statusBarVisibility": "visible",
