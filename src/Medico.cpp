@@ -1,5 +1,7 @@
 #include "Medico.h"
-#include <sstream>  // Para utilizar std::istringstream
+#include <sstream>
+#include <stdexcept>
+#include <algorithm>
 
 // Constructor por defecto
 Medico::Medico() : id(0), nombre(""), especialidad("") {}
@@ -8,32 +10,36 @@ Medico::Medico() : id(0), nombre(""), especialidad("") {}
 Medico::Medico(int id, const std::string& nombre, const std::string& especialidad)
     : id(id), nombre(nombre), especialidad(especialidad) {}
 
-// Métodos de acceso (getters y setters)
+// Getters
 int Medico::getId() const { return id; }
-void Medico::setId(int id) { this->id = id; }
-
 std::string Medico::getNombre() const { return nombre; }
-void Medico::setNombre(const std::string& nombre) { this->nombre = nombre; }
-
 std::string Medico::getEspecialidad() const { return especialidad; }
+
+// Setters
+void Medico::setId(int id) { this->id = id; }
+void Medico::setNombre(const std::string& nombre) { this->nombre = nombre; }
 void Medico::setEspecialidad(const std::string& especialidad) { this->especialidad = especialidad; }
 
-// Serializar el objeto Medico a un string para guardar en archivo
+// Serialización del objeto
 std::string Medico::serializar() const {
     return std::to_string(id) + "," + nombre + "," + especialidad;
 }
 
-// Deserializar un string para convertirlo en un objeto Medico
+// Deserialización del objeto
 void Medico::deserializar(const std::string& datos) {
     std::istringstream ss(datos);
-    std::getline(ss, nombre, ',');
-    std::getline(ss, especialidad, ',');
     std::string idStr;
-    std::getline(ss, idStr);
-    id = std::stoi(idStr);  // Convierte el ID a entero
+
+    if (!std::getline(ss, idStr, ',') || 
+        !std::getline(ss, nombre, ',') || 
+        !std::getline(ss, especialidad, ',')) {
+        throw std::runtime_error("Error en el formato de datos del médico: " + datos);
+    }
+
+    if (!std::all_of(idStr.begin(), idStr.end(), ::isdigit)) {
+        throw std::runtime_error("Error: ID del médico no es válido -> " + idStr);
+    }
+
+    id = std::stoi(idStr);
 }
-
-
-
-
 

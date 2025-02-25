@@ -10,28 +10,27 @@ private:
     std::string especialidad;
 
 public:
-    // Constructor por defecto
+    // Constructores
     Medico();
-
-    // Constructor con parámetros
     Medico(int id, const std::string& nombre, const std::string& especialidad);
-
-    // Métodos de acceso (getters y setters)
+    
+    // Getters
     int getId() const;
-    void setId(int id);
-
     std::string getNombre() const;
-    void setNombre(const std::string& nombre);
-
     std::string getEspecialidad() const;
-    void setEspecialidad(const std::string& especialidad);
 
-    // Métodos para serializar y deserializar
-    std::string serializar() const;  // Convierte a string para guardar
-    void deserializar(const std::string& datos);  // Convierte de string a objeto
+    // Setters
+    void setId(int id);
+    void setNombre(const std::string& nombre);
+    void setEspecialidad(const std::string& especialidad);
+    
+    // Métodos de serialización
+    std::string serializar() const;
+    void deserializar(const std::string& datos);
 };
 
-#endif
+#endif // MEDICO_H
+
 
 
 

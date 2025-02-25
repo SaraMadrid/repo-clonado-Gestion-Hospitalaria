@@ -2,7 +2,7 @@
 #define PACIENTE_H
 
 #include <string>
-#include <sstream> // Para serialización y deserialización
+#include <sstream>
 
 class Paciente {
 private:
@@ -14,8 +14,9 @@ private:
 
 public:
     // Constructores
-    Paciente();
+    Paciente(); 
     Paciente(int id, const std::string& nombre, int edad, const std::string& direccion, const std::string& telefono);
+    Paciente(int id, const std::string& nombre);  
 
     // Getters y Setters
     int getId() const;
@@ -38,7 +39,9 @@ public:
     void deserializar(const std::string& linea);
 };
 
-#endif
+#endif 
+
+
 
 
 

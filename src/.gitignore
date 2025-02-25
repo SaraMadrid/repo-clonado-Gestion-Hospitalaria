@@ -1,12 +1,1 @@
-
----
-
-### **9. `.gitignore`**
-
-```plaintext
-# Archivos de compilación
-*.o
-hospital_manager
-
-# Datos temporales
-data/backup/
+build/
