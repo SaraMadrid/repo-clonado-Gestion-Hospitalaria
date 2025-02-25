@@ -5,35 +5,25 @@
 #include <string>
 #include "Paciente.h"
 #include "ServicioArchivos.h"
+#include "IServicioPacientes.h"
 
-
-class ServicioPacientes {
+class ServicioPacientes : public IServicioPacientes {
 private:
-    std::vector<Paciente> pacientes;          
-    ServicioArchivos servicioArchivos;        
+    std::vector<Paciente> pacientes;
+    ServicioArchivos servicioArchivos;
 
 public:
+    explicit ServicioPacientes(const std::string& rutaArchivo);
     
-    ServicioPacientes(const std::string& rutaArchivo);
-    void agregarPaciente(const Paciente& paciente);
-
-    Paciente* buscarPacientePorId(int id);
-    const std::vector<Paciente>& obtenerTodosLosPacientes() const;
-    bool eliminarPaciente(int id);
-    void cargarPacientesDesdeArchivo(const std::string& ruta);
-    void guardarPacientesEnArchivo(const std::string& ruta) const;
-    void generarReporteDePacientes(const std::string& rutaReporte) const;
+    void agregarPaciente(const Paciente& paciente) override;
+    Paciente* buscarPacientePorId(int id) override;
+    void modificarPaciente(int id, const Paciente& nuevoPaciente) override;
+    bool eliminarPaciente(int id) override;
+    const std::vector<Paciente>& obtenerTodosLosPacientes() const override;
+    void cargarPacientesDesdeArchivo(const std::string& ruta) override;
+    void guardarPacientesEnArchivo(const std::string& ruta) const override;
 };
 
 #endif
 
-
-
-
-
-
-
-
-
-
-
+ 

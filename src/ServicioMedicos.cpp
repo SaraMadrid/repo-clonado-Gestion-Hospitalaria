@@ -1,80 +1,68 @@
 #include "ServicioMedicos.h"
-#include <fstream>
 #include <iostream>
 #include <algorithm>
-#include <stdexcept>
 
-// Constructor que inicializa archivoMedicos y servicioArchivos
 ServicioMedicos::ServicioMedicos(const std::string& rutaArchivo)
-    : archivoMedicos(rutaArchivo), servicioArchivos(rutaArchivo) { }
+    : archivoMedicos(rutaArchivo) {
+    cargarMedicosDesdeArchivo(archivoMedicos);
+}
 
-// Agregar un médico al vector, verificando duplicados
 void ServicioMedicos::agregarMedico(const Medico& medico) {
-    if (buscarMedicoPorId(medico.getId()) != nullptr) {
-        throw std::runtime_error("Ya existe un médico con el mismo ID.");
-    }
     medicos.push_back(medico);
+    guardarMedicosEnArchivo(archivoMedicos);
 }
 
-// Buscar un médico por su ID
 Medico* ServicioMedicos::buscarMedicoPorId(int id) {
-    auto it = std::find_if(medicos.begin(), medicos.end(),
-        [id](const Medico& medico) { return medico.getId() == id; });
-    return it != medicos.end() ? &(*it) : nullptr;
+    for (auto& medico : medicos) {
+        if (medico.getId() == id) {
+            return &medico;
+        }
+    }
+    return nullptr;
 }
 
-// Obtener todos los médicos (referencia constante para evitar copias)
-const std::vector<Medico>& ServicioMedicos::obtenerTodosLosMedicos() const {
-    return medicos;
+void ServicioMedicos::modificarMedico(int id, const Medico& nuevoMedico) {
+    for (auto& medico : medicos) {
+        if (medico.getId() == id) {
+            medico = nuevoMedico;
+            guardarMedicosEnArchivo(archivoMedicos);
+            return;
+        }
+    }
+    std::cerr << "Error: Médico con ID " << id << " no encontrado.\n";
 }
 
-// Eliminar un médico por su ID
 void ServicioMedicos::eliminarMedico(int id) {
     auto it = std::remove_if(medicos.begin(), medicos.end(),
         [id](const Medico& medico) { return medico.getId() == id; });
-    if (it == medicos.end()) {
-        throw std::runtime_error("No se encontró un médico con el ID proporcionado.");
+
+    if (it != medicos.end()) {
+        medicos.erase(it, medicos.end());
+        guardarMedicosEnArchivo(archivoMedicos);
+    } else {
+        std::cerr << "Error: Médico con ID " << id << " no encontrado.\n";
     }
-    medicos.erase(it, medicos.end());
 }
 
-// Cargar médicos desde un archivo de texto
-void ServicioMedicos::cargarMedicosDesdeArchivo(const std::string& ruta) {
-    std::ifstream archivo(ruta);
-    if (!archivo.is_open()) {
-        throw std::runtime_error("No se pudo abrir el archivo para leer.");
-    }
+std::vector<Medico> ServicioMedicos::obtenerMedicos() const {
+    return medicos;
+}
 
-    std::string linea;
-    while (std::getline(archivo, linea)) {
+void ServicioMedicos::cargarMedicosDesdeArchivo(const std::string& nombreArchivo) {
+    std::vector<std::string> lineas = servicioArchivos.leerArchivo(nombreArchivo);
+    medicos.clear();
+
+    for (const std::string& linea : lineas) {
         Medico medico;
         medico.deserializar(linea);
-        agregarMedico(medico); // Verifica duplicados al agregar
+        medicos.push_back(medico);
     }
-
-    archivo.close();
 }
 
-// Guardar médicos en un archivo de texto
-void ServicioMedicos::guardarMedicosEnArchivo(const std::string& ruta) const {
-    std::ofstream archivo("medicos.txt");
-    if (!archivo.is_open()) {
-        throw std::runtime_error("No se pudo abrir el archivo para escribir.");
-    }
-
+void ServicioMedicos::guardarMedicosEnArchivo(const std::string& nombreArchivo) const {
+    std::vector<std::string> lineas;
     for (const auto& medico : medicos) {
-        archivo << medico.serializar() << std::endl;
+        lineas.push_back(medico.serializar());
     }
-
-    archivo.close();
+    servicioArchivos.escribirArchivo(nombreArchivo, lineas);
 }
-
-
-
-
-
-
-
-
-
-

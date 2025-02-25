@@ -1,31 +1,23 @@
 #ifndef SERVICIO_ARCHIVOS_H
 #define SERVICIO_ARCHIVOS_H
 
-#include <string>
-#include <vector>
-#include "Paciente.h"
-#include "Medico.h"
-#include "Cita.h"
+#include "IServicioArchivos.h"
 
-class ServicioArchivos {
-private:
-    std::string nombreArchivo;
-
+class ServicioArchivos : public IServicioArchivos {
 public:
-    ServicioArchivos();  
-    explicit ServicioArchivos(const std::string& archivo);
+    ServicioArchivos() = default;
 
-    void guardar(const std::string& datos);
-    std::string leer();
-    void limpiar();
-    std::vector<std::string> leerLineasDesdeArchivo(const std::string& ruta);
+    std::vector<std::string> leerArchivo(const std::string& rutaArchivo) override;
+    void escribirArchivo(const std::string& rutaArchivo, const std::vector<std::string>& lineas) const override;
 
-    void generarReportePacientes(const std::vector<Paciente>& pacientes) const;
-    void generarReporteMedicos(const std::vector<Medico>& medicos) const;
-    void generarReporteCitas(const std::vector<Cita>& citas) const;
+    void generarReportePacientes(const std::vector<Paciente>& pacientes) const override;
+    void generarReporteMedicos(const std::vector<Medico>& medicos) const override;
+    void generarReporteCitas(const std::vector<Cita>& citas) const override;
 };
 
-#endif 
+#endif
+
+
 
 
 

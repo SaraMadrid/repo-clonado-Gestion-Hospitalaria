@@ -5,8 +5,9 @@
 #include <vector>
 #include "Medico.h"
 #include "ServicioArchivos.h"
+#include "IServicioMedicos.h"
 
-class ServicioMedicos {
+class ServicioMedicos : public IServicioMedicos {
 private:
     std::vector<Medico> medicos;
     ServicioArchivos servicioArchivos;
@@ -15,15 +16,17 @@ private:
 public:
     ServicioMedicos(const std::string& rutaArchivo);
 
-    void agregarMedico(const Medico& medico);
-    Medico* buscarMedicoPorId(int id);
-    const std::vector<Medico>& obtenerTodosLosMedicos() const;
-    void eliminarMedico(int id);
-    void cargarMedicosDesdeArchivo(const std::string& ruta);
-    void guardarMedicosEnArchivo(const std::string& ruta) const;
+    void agregarMedico(const Medico& medico) override;
+    Medico* buscarMedicoPorId(int id) override;
+    void modificarMedico(int id, const Medico& nuevoMedico) override;
+    void eliminarMedico(int id) override;
+    std::vector<Medico> obtenerMedicos() const override;
+    void cargarMedicosDesdeArchivo(const std::string& nombreArchivo) override;
+    void guardarMedicosEnArchivo(const std::string& nombreArchivo) const override;
 };
 
-#endif 
+#endif
+
 
 
 

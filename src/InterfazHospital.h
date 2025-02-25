@@ -1,53 +1,59 @@
 #ifndef INTERFAZHOSPITAL_H
 #define INTERFAZHOSPITAL_H
 
-#include "ServicioCitas.h"
-#include "ServicioPacientes.h"
-#include "ServicioMedicos.h"
-#include "ServicioArchivos.h"
-#include <iostream>
-#include <string>
-#include <regex>
+#include <memory>
+#include "IServicioCitas.h"
+#include "IServicioPacientes.h"
+#include "IServicioMedicos.h"
+#include "IServicioArchivos.h"
+#include "Cita.h"
+#include "Paciente.h"
+#include "Medico.h"
 
 class InterfazHospital {
 private:
-    ServicioCitas servicioCitas;
-    ServicioPacientes servicioPacientes;
-    ServicioMedicos servicioMedicos;
-    ServicioArchivos nombreArchivo;
-    ServicioArchivos servicioArchivos;
+    std::unique_ptr<IServicioCitas> servicioCitas;
+    std::unique_ptr<IServicioPacientes> servicioPacientes;
+    std::unique_ptr<IServicioMedicos> servicioMedicos;
+    std::unique_ptr<IServicioArchivos> servicioArchivos;
+
+    bool archivoExiste(const std::string& nombreArchivo);
 
 public:
-    InterfazHospital(); 
+InterfazHospital(std::unique_ptr<IServicioCitas> citas, 
+    std::unique_ptr<IServicioPacientes> pacientes, 
+    std::unique_ptr<IServicioMedicos> medicos,
+    std::unique_ptr<IServicioArchivos> archivos);
 
-    bool archivoExiste(const std::string& nombreArchivo); 
+        
+    InterfazHospital() = default;                 
 
+    void iniciar();
     void mostrarMenuPrincipal();
     void gestionarPacientes();
     void gestionarMedicos();
     void gestionarCitas();
     void generarReportes();
 
-    void agregarPaciente();
-    void modificarPaciente();
-    void eliminarPaciente();
-    void listarPacientes();
-
+    // Funciones de gestión de médicos
     void agregarMedico();
     void modificarMedico();
     void eliminarMedico();
     void listarMedicos();
 
+    // Funciones de gestión de citas
     void agregarCita();
     void modificarCita();
     void eliminarCita();
     void listarCitas();
-    void validarFormatoFechaHora(const std::string& fecha, const std::string& hora);
 
-
-    void iniciar();
+    //Funciones de gestión de pacientes
+    void agregarPaciente();
+    void modificarPaciente(); 
+    void eliminarPaciente(); 
+    void listarPacientes(); 
+     
 };
 
 #endif 
-
 

@@ -5,39 +5,25 @@
 #include <string>
 #include "Cita.h"
 #include "ServicioArchivos.h"
+#include "IServicioCitas.h"
 
-class ServicioCitas {
+class ServicioCitas : public IServicioCitas {
 private:
     std::vector<Cita> citas;
     ServicioArchivos servicioArchivos;
     std::string archivoCitas;
+    
 
 public:
-    // Constructor que inicializa archivoCitas y servicioArchivos
     explicit ServicioCitas(const std::string& rutaArchivo);
 
-    void agregarCita(const Cita& cita);
-    void eliminarCita(int id);
-    Cita* buscarCitaPorId(int id);
-    const std::vector<Cita>& obtenerTodasLasCitas() const;
-    void cargarCitasDesdeArchivo(const std::string& ruta);
-    void guardarCitasEnArchivo(const std::string& ruta) const;
+    void agregarCita(const Cita& cita) override;
+    Cita* buscarCitaPorId(int id) override;
+    void modificarCita(int id, const Cita& nuevaCita) override;
+    void eliminarCita(int id) override;
+    std::vector<Cita> obtenerTodasLasCitas() const override;
+    void cargarCitasDesdeArchivo(const std::string& ruta) override;
+    void guardarCitasEnArchivo(const std::string& ruta) const override;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif
